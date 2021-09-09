@@ -75,6 +75,7 @@ public final class BluetoothPermissionRequest extends BroadcastReceiver {
             mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             mRequestType = intent.getIntExtra(BluetoothDevice.EXTRA_ACCESS_REQUEST_TYPE,
                                                  BluetoothDevice.REQUEST_TYPE_PROFILE_CONNECTION);
+
             if (DEBUG) {
                 Log.d(TAG, "onReceive request type: " + mRequestType);
             }
@@ -106,7 +107,7 @@ public final class BluetoothPermissionRequest extends BroadcastReceiver {
             connectionAccessIntent.putExtra(BluetoothDevice.EXTRA_ACCESS_REQUEST_TYPE,
                                             mRequestType);
             connectionAccessIntent.putExtra(BluetoothDevice.EXTRA_DEVICE, mDevice);
-            
+
             String deviceAddress = mDevice != null ? mDevice.getAddress() : null;
             String deviceName = mDevice != null ? mDevice.getName() : null;
             String title = null;
@@ -143,13 +144,17 @@ public final class BluetoothPermissionRequest extends BroadcastReceiver {
                                 R.string.bluetooth_message_access_notification_content);
                         break;
                     case BluetoothDevice.REQUEST_TYPE_SIM_ACCESS:
-                        title = context.getString(R.string.bluetooth_sap_request);
-                        message = context.getString(R.string.bluetooth_sap_acceptance_dialog_text,
+                        title = context.getString(
+                                R.string.bluetooth_sim_card_access_notification_title);
+                        message = context.getString(
+                                R.string.bluetooth_sim_card_access_notification_content,
                                 deviceAlias, deviceAlias);
                         break;
                     default:
-                        title = context.getString(R.string.bluetooth_connection_permission_request);
-                        message = context.getString(R.string.bluetooth_connection_dialog_text,
+                        title = context.getString(
+                                R.string.bluetooth_connect_access_notification_title);
+                        message = context.getString(
+                                R.string.bluetooth_connect_access_notification_content,
                                 deviceAlias, deviceAlias);
                         break;
                 }
@@ -224,7 +229,7 @@ public final class BluetoothPermissionRequest extends BroadcastReceiver {
 
         LocalBluetoothManager bluetoothManager = Utils.getLocalBtManager(mContext);
         CachedBluetoothDeviceManager cachedDeviceManager =
-            	bluetoothManager.getCachedDeviceManager();
+                bluetoothManager.getCachedDeviceManager();
         CachedBluetoothDevice cachedDevice = cachedDeviceManager.findDevice(mDevice);
         if (cachedDevice == null) {
             cachedDevice = cachedDeviceManager.addDevice(mDevice);
